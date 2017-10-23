@@ -1,0 +1,39 @@
+# cbt-output-viz
+This project contains the initial steps for CBT output Visualization by Soumya (from IIIT-H)
+
+* Directory Structure
+  The directory structure of this directory is as follows:
+
+  #+BEGIN_EXAMPLE
+  ├── input
+  │   └── fio_json.out
+  ├── output
+  │   ├── Latency.png
+  │   ├── Trim cycle IO depth levels.png
+  │   └── Write cycle clat Percentiles.png
+  ├── README.org
+  └── src
+    └── data-viz-sample.py
+  #+END_EXAMPLE
+
+* How to Execute
+
+  To run the code use the following command:
+
+  #+BEGIN_SRC python
+  python src/data-viz-sample.py input/fio_json.out
+  #+END_SRC
+
+  On running the code, the output(image of graphs) are automatically
+  saved in the output directory.
+  
+* Dependencies
+
+  To run this script the following are the dependencies:
+
+  - Linux environment, preferably Ubuntu(14.04 and 16.04) and CentOS 7
+    [These are tested].
+  - Python (>=2.7)
+  - Matplotlib version 2.0.2 (install from [[https://matplotlib.org/faq/installing_faq.html][here]])
+
+
