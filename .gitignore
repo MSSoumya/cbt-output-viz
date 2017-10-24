@@ -1,0 +1,19 @@
+# OS generated files #
+######################
+._*
+.Trashes
+ehthumbs.db
+Thumbs.db
+*.pyc
+*~
+*.sw[p|o]
+\#*\#
+.\#*\#
+venv/
+build/
+src/org-templates
+src/style
+sitemap*
+lint_output
+literate-tools/
+*.html
