@@ -1,3 +1,6 @@
+#+TITLE: Design document for CBT Output Visualization
+#+Author: M.S.Soumya
+#+Date: [2017-10-23 Mon]
 
 
 * My understanding of the project
@@ -41,42 +44,54 @@
   visualization tools. The following table summarizes each library and
   its capabilities.
 
-  |-----------------+----------------------------------------------+----------------------------------+----------+---------------+----------|
-  | *Visualization* |                                              | *Further*                        | Language | Time series   | Links    |
-  | *Library*       | *Characteristics*                            | examine                          |          |               |          |
-  |-----------------+----------------------------------------------+----------------------------------+----------+---------------+----------|
-  | matplotlib      | Integrates well with the current             | Integrating the generated graphs | python   |               |          |
-  |                 | python environment. A python parser          | on a web page.                   |          | Need to check |          |
-  |                 | to pre-process the benchmark output          |                                  |          |               |          |
-  |                 | would be required. Then drawing              |                                  |          |               |          |
-  |                 | graphs from parsed data becomes easy.        |                                  |          |               |          |
-  |-----------------+----------------------------------------------+----------------------------------+----------+---------------+----------|
-  | fio2gnuplot     | Takes output from fio and renders            | Integrating these images on      | gnuplot  |               |          |
-  |                 | 2D images of the data. There might           | web page. Compatibility with     |          | Need to check |          |
-  |                 | be no need to pre-process the fio            | python frameworks                |          |               |          |
-  |                 | output to make plots.                        |                                  |          |               |          |
-  |-----------------+----------------------------------------------+----------------------------------+----------+---------------+----------|
-  | grafana         | Provides a beautiful interface for           | Integrating with current CBT     |          | Yes           | [[http://docs.grafana.org/guides/getting_started/][click me]] |
-  |                 | displaying various performance metrics       | framework.                       |          |               |          |
-  |                 | and for IOPS. Requires its own server setup. |                                  |          |               |          |
-  |                 | Less data pre-processing required.           |                                  |          |               |          |
-  |-----------------+----------------------------------------------+----------------------------------+----------+---------------+----------|
-  | D3              |                                              |                                  |          | Need to check |          |
-  |-----------------+----------------------------------------------+----------------------------------+----------+---------------+----------|
-  | Chart.js        |                                              |                                  | JS       | Yes           |          |
-  |-----------------+----------------------------------------------+----------------------------------+----------+---------------+----------|
-  | Highcharts      | Allows                                       |                                  | JS       | Yes           | [[https://www.highcharts.com/docs][click me]] |
-  |                 |                                              |                                  |          |               |          |
-  |-----------------+----------------------------------------------+----------------------------------+----------+---------------+----------|
+  |-----------------+-----------------------------------------------+-----------------------------------------+------------+---------------+----------|
+  | *Visualization* | *A brief summary*                             | *Points to further examine*             | *Language* | *Time series* | *Links*  |
+  | *Library*       |                                               |                                         |            |               |          |
+  |-----------------+-----------------------------------------------+-----------------------------------------+------------+---------------+----------|
+  | matplotlib      | Integrates well with the current              | Integrating the generated graphs        | python     |               |          |
+  |                 | python environment. A python parser           | on a web page.                          |            | Need to check |          |
+  |                 | to pre-process the benchmark output           |                                         |            |               |          |
+  |                 | would be required. Then drawing               |                                         |            |               |          |
+  |                 | graphs from parsed data becomes easy.         |                                         |            |               |          |
+  |                 | Compatible with lists and dictionaries        |                                         |            |               |          |
+  |                 | in python.                                    |                                         |            |               |          |
+  |-----------------+-----------------------------------------------+-----------------------------------------+------------+---------------+----------|
+  | fio2gnuplot     | Takes output from fio and renders             | Integrating these images on             | gnuplot    |               | [[https://github.com/axboe/fio/blob/master/tools/plot/fio2gnuplot.manpage][click me]] |
+  |                 | 2D images of the data. There might            | web page. Compatibility with            |            | Need to check |          |
+  |                 | be no need to pre-process the fio             | python frameworks. Underlying data      |            |               |          |
+  |                 | output to make plots.                         | structure used for data representation. |            |               |          |
+  |-----------------+-----------------------------------------------+-----------------------------------------+------------+---------------+----------|
+  | grafana         | Provides a beautiful interface for            | Integrating with current CBT            |            | Yes           | [[http://docs.grafana.org/guides/getting_started/][click me]] |
+  |                 | displaying various performance metrics        | framework.                              | grafana    |               |          |
+  |                 | and for IOPS. Requires its own server setup.  |                                         |            |               | [[http://docs.grafana.org/features/][features]] |
+  |                 | Less data pre-processing required. Inbuilt    |                                         |            |               |          |
+  |                 | APIs to connect/get data from AWS cloudwatch, |                                         |            |               |          |
+  |                 | MySQL, PostgreSQL, Elasticsearch etc.         |                                         |            |               |          |
+  |-----------------+-----------------------------------------------+-----------------------------------------+------------+---------------+----------|
+  | D3              |                                               | Underlying data structure used for      |            |               |          |
+  |                 |                                               | data representation. Level of           |            | Need to check |          |
+  |                 |                                               | customization provided.                 |            |               |          |
+  |-----------------+-----------------------------------------------+-----------------------------------------+------------+---------------+----------|
+  | Chart.js        | A wide range of graph types available.        | Dependencies and integration into       | JavaScript |               | [[http://www.chartjs.org/docs/latest/][click me]] |
+  |                 | Use a simple JSON like structure for          | web framework. Level of customization   |            | Yes           |          |
+  |                 | data representation.                          | provided.                               |            |               |          |
+  |-----------------+-----------------------------------------------+-----------------------------------------+------------+---------------+----------|
+  | Highcharts      | Allows annotations as well the ability        | Dependencies and integration into       | JavaScript |               | [[https://www.highcharts.com/docs][click me]] |
+  |                 | to zoom into a graph. Would need data         | web framework. Level of customization   |            | Yes           |          |
+  |                 | pre-processing before to visualize data       | provided. Underlying data structure     |            |               |          |
+  |                 | using this library.                           | used for data representation.           |            |               |          |
+  |-----------------+-----------------------------------------------+-----------------------------------------+------------+---------------+----------|
 
   Factors for choosing the visualization library:
   - Ease of displaying on a web-page
   - Easy/seamless integration with web framework
-  - Allows easy display of timeseries
+  - Allows easy display of time series
 
 * Project Timeline
-  To give a simple overview, I have kept the project timelines aligned
-  with the proposed timeline on the website.
+  Below is a tentative project timeline, aligned with the proposed
+  timeline on the website. (As more design considerations become
+  clear, the timeline can be enhanced with more specific task
+  breakdown.)
 
 
 - Project Begin date :: December 5th; 
@@ -95,5 +110,12 @@
 - Scaling to larger datasets.
 - Integration of data visualization into CBT and Teuthology.
 
+* References
+  1. https://wiki.cs.umd.edu/cmsc734/images/d/df/VisualizingRegressionTestResults.pdf
+  2. https://www.systutorials.com/docs/linux/man/1-fio2gnuplot/
+  3. https://wiki.mikejung.biz/Benchmarking
+  4. https://github.com/ceph/cbt/
+  5. https://github.com/axboe/fio
+  6. https://github.com/ceph/teuthology
 
 
