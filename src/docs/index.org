@@ -1,0 +1,99 @@
+
+
+* My understanding of the project
+  The aim of the project is to develop a simple web based platform
+  which enables developers to visualize the results of various
+  benchmarking tests. From the documentation of [[https://github.com/ceph/cbt][CBT]], I understand that
+  there are multiple types of benchmarking tests ie: librbdfio,
+  radosbench, rbdfio, and kvmrbdfio each with a specific purpose. The
+  scope of this project was limited to radosbench and librbdfio. The
+  design of this platform must be nimble enough to include future
+  integration of kvmrbdfio and rbdfio. Keeping cohesion and coupling
+  in mind, each test should be independent of the other, but data
+  pre-processing steps(if any), should be general enough to be re-used
+  across multiple benchmarks. 
+
+** Design Considerations
+   To be able to make a more realistic timeline, these are a few
+   design considerations I would like to address. (Please consider
+   these as my doubts regarding the project). These can also be
+   considered as next steps for the project.
+
+   - Which frontend framework do we consider?  
+     + I am comfortable using Flask and Angular2 for the web-pages.
+   - Is there an existing mechanism to save/log the results of
+     benchmarks?
+     + If yes, is there a database already in place?
+   - Details/Description of the benchmark outputs to be able to display them more
+     meaningfully.
+   - From the sample fio output provided, there is a clear distinction
+     between two types of data.
+     + Data that can be plotted based on this particular benchmark output.
+     + Data which needs previous outputs to make an inference. 
+   - How are the benchmarks run?
+   - When are the Benchmarks run?
+   - How to integrate the CBT framework and the visualization
+     framework?
+       
+* Preliminary survey on Visualization tools
+  There are several open source tools available for visualizing
+  data. Now, to best suite our purpose I looked at a few IOPs
+  visualization tools. The following table summarizes each library and
+  its capabilities.
+
+  |-----------------+----------------------------------------------+----------------------------------+----------+---------------+----------|
+  | *Visualization* |                                              | *Further*                        | Language | Time series   | Links    |
+  | *Library*       | *Characteristics*                            | examine                          |          |               |          |
+  |-----------------+----------------------------------------------+----------------------------------+----------+---------------+----------|
+  | matplotlib      | Integrates well with the current             | Integrating the generated graphs | python   |               |          |
+  |                 | python environment. A python parser          | on a web page.                   |          | Need to check |          |
+  |                 | to pre-process the benchmark output          |                                  |          |               |          |
+  |                 | would be required. Then drawing              |                                  |          |               |          |
+  |                 | graphs from parsed data becomes easy.        |                                  |          |               |          |
+  |-----------------+----------------------------------------------+----------------------------------+----------+---------------+----------|
+  | fio2gnuplot     | Takes output from fio and renders            | Integrating these images on      | gnuplot  |               |          |
+  |                 | 2D images of the data. There might           | web page. Compatibility with     |          | Need to check |          |
+  |                 | be no need to pre-process the fio            | python frameworks                |          |               |          |
+  |                 | output to make plots.                        |                                  |          |               |          |
+  |-----------------+----------------------------------------------+----------------------------------+----------+---------------+----------|
+  | grafana         | Provides a beautiful interface for           | Integrating with current CBT     |          | Yes           | [[http://docs.grafana.org/guides/getting_started/][click me]] |
+  |                 | displaying various performance metrics       | framework.                       |          |               |          |
+  |                 | and for IOPS. Requires its own server setup. |                                  |          |               |          |
+  |                 | Less data pre-processing required.           |                                  |          |               |          |
+  |-----------------+----------------------------------------------+----------------------------------+----------+---------------+----------|
+  | D3              |                                              |                                  |          | Need to check |          |
+  |-----------------+----------------------------------------------+----------------------------------+----------+---------------+----------|
+  | Chart.js        |                                              |                                  | JS       | Yes           |          |
+  |-----------------+----------------------------------------------+----------------------------------+----------+---------------+----------|
+  | Highcharts      | Allows                                       |                                  | JS       | Yes           | [[https://www.highcharts.com/docs][click me]] |
+  |                 |                                              |                                  |          |               |          |
+  |-----------------+----------------------------------------------+----------------------------------+----------+---------------+----------|
+
+  Factors for choosing the visualization library:
+  - Ease of displaying on a web-page
+  - Easy/seamless integration with web framework
+  - Allows easy display of timeseries
+
+* Project Timeline
+  To give a simple overview, I have kept the project timelines aligned
+  with the proposed timeline on the website.
+
+
+- Project Begin date :: December 5th; 
+- Project End date   :: March 5th;
+
+** Mid Term goals:
+- Figure out the key audience, the dataset and define “what to
+  visualize?”.
+- Research on various available tools and their compatibility with the
+  existing CBT framework.
+- Get the design approved by mentors.
+- Clear idea of the tools to be used, along with a prototype with
+  smaller datasets.
+
+** End Term goals:
+- Scaling to larger datasets.
+- Integration of data visualization into CBT and Teuthology.
+
+
+
