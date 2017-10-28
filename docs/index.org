@@ -68,9 +68,11 @@
   |                 | APIs to connect/get data from AWS cloudwatch, |                                         |            |               |          |
   |                 | MySQL, PostgreSQL, Elasticsearch etc.         |                                         |            |               |          |
   |-----------------+-----------------------------------------------+-----------------------------------------+------------+---------------+----------|
-  | D3              |                                               | Underlying data structure used for      |            |               |          |
-  |                 |                                               | data representation. Level of           |            | Need to check |          |
-  |                 |                                               | customization provided.                 |            |               |          |
+  | D3              |                                               | Underlying data structure used for      | D3 and     | There are     |          |
+  |                 |                                               | data representation. Level of           | JavaScript | supporting    |          |
+  |                 |                                               | customization provided.                 |            | libraries     |          |
+  |                 |                                               |                                         |            | developed     |          |
+  |                 |                                               |                                         |            | on top of D3  |          |
   |-----------------+-----------------------------------------------+-----------------------------------------+------------+---------------+----------|
   | Chart.js        | A wide range of graph types available.        | Dependencies and integration into       | JavaScript |               | [[http://www.chartjs.org/docs/latest/][click me]] |
   |                 | Use a simple JSON like structure for          | web framework. Level of customization   |            | Yes           |          |
@@ -117,5 +119,10 @@
   4. https://github.com/ceph/cbt/
   5. https://github.com/axboe/fio
   6. https://github.com/ceph/teuthology
+  7. https://forums.servethehome.com/index.php?threads/benchmarking-with-fio-and-generating-graphs.7665/
+  8. http://fio.readthedocs.io/en/latest/fio_doc.html
+  9. https://www.linux.com/learn/inspecting-disk-io-performance-fio
+
+
 
 
