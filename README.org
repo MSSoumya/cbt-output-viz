@@ -1,31 +1,58 @@
+#+TITLE: CBT Output Visualization
+#+AUTHOR: M.S.Soumya
+
 # cbt-output-viz
 This project contains the initial steps for CBT output Visualization by Soumya (from IIIT-H)
 
 * Directory Structure
   The directory structure of this directory is as follows:
-
   #+BEGIN_EXAMPLE
+  .
+  ├── docs
+  │   ├── index.org
+  │   └── index.org~
   ├── input
-  │   └── fio_json.out
-  ├── output
-  │   ├── Latency.png
-  │   ├── Trim cycle IO depth levels.png
-  │   └── Write cycle clat Percentiles.png
+  │   └── fio_json.out
   ├── README.org
   └── src
-    └── data-viz-sample.py
+    ├── __init__.py
+    ├── setup.sh
+    ├── static
+    │   ├── bootstrap.min.css
+    │   ├── bootstrap.min.js
+    │   ├── main.css
+    │   └── popper.min.js
+    └── templates
+        └── index.html
+
   #+END_EXAMPLE
 
-* How to Execute
+* Development setup
+  If you are seeing this file from you PC/laptop, it means you have
+  cloned the repository. 
 
-  To run the code use the following command:
+** Install require dependencies
+  These steps are written assuming that the users machine has
+  =virtualenv=, =flask= and =pip= pre-installed. (also run =pip
+  install requests= )
 
-  #+BEGIN_SRC python
-  python src/data-viz-sample.py input/fio_json.out
-  #+END_SRC
+  To install the necessary dependencies, 
+** Environment setup
+   Now that you have built the application, run the following
+   commands on terminal:
 
-  On running the code, the output(image of graphs) are automatically
-  saved in the output directory.
+   #+BEGIN_EXAMPLE
+   $ source flask/bin/activate
+   #+END_EXAMPLE
+
+** Start the application
+   On completion of the above steps, run the following command to
+   start the SSS-maker application:
+
+   #+BEGIN_EXAMPLE
+   (flask)$ cd <path to src>
+   (flask)$ python __init__.py
+   #+END_EXAMPLE
   
 * Dependencies
 
@@ -34,6 +61,4 @@ This project contains the initial steps for CBT output Visualization by Soumya (
   - Linux environment, preferably Ubuntu(14.04 and 16.04) and CentOS 7
     [These are tested].
   - Python (>=2.7)
-  - Matplotlib version 2.0.2 (install from [[https://matplotlib.org/faq/installing_faq.html][here]])
-
-
+ 
