@@ -68,7 +68,7 @@
   |                 | APIs to connect/get data from AWS cloudwatch, |                                         |            |               |          |
   |                 | MySQL, PostgreSQL, Elasticsearch etc.         |                                         |            |               |          |
   |-----------------+-----------------------------------------------+-----------------------------------------+------------+---------------+----------|
-  | D3              |                                               | Underlying data structure used for      | D3 and     | There are     |          |
+  | D3              | Steep learning curve                          | Underlying data structure used for      | D3 and     | There are     |          |
   |                 |                                               | data representation. Level of           | JavaScript | supporting    |          |
   |                 |                                               | customization provided.                 |            | libraries     |          |
   |                 |                                               |                                         |            | developed     |          |
