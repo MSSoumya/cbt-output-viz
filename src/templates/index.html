@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--<link rel="stylesheet" media="screen" href = "{{ url_for('static', filename='bootstrap.min.css') }}">-->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+<meta name="viewport" content = "width=device-width, initial-scale=1.0">
+<head>
+<title>CBT Visualization</title>
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script type = "text/javascript" src = "/static/popper.min.js"></script>
+<script type = "text/javascript" src = "/static/bootstrap.min.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!-- <script src="../static/graph.js"></script> -->
+</head>
+
+<body class = "body">
+
+    <h3>{{ title }}</h3>
+    {% for p in paragraph %}
+    <p>{{ p }}</p>
+    {% endfor %}
+
+
+    <div class="container">
+      <h2>CBT Output Visualization</h2>
+      
+      <ul class="nav nav-pills">
+        <li class="active"><a data-toggle="pill" href="#home">Home</a></li>
+        <li><a data-toggle="pill" href="#menu1">Global Options</a></li>
+        <li><a data-toggle="pill" href="#menu2">Jobs Info</a></li>
+        <li><a data-toggle="pill" href="#menu3">Disk Utility</a></li>
+      </ul>
+      
+      <div class="tab-content">
+        <div id="home" class="tab-pane fade in active">
+          <h3>HOME</h3>
+          <p>To make the output generated from various tests such as librbdfio, fbdfio, radosbench and kvmrbdfio easily understandable.</p>
+          <p>This visualization displays results from the following information:</p>
+            <ul class="list-group">
+              {% for key,val in basic_info.items() %}
+                <li class="list-group-item"><b>{{ key|safe }}:</b> {{ val|safe}}</li>
+              {% endfor %}
+            </ul>
+        </div>
+        <div id="menu1" class="tab-pane fade">
+          <h3>Global Options</h3>
+          <p>This section displays the parameters used to setup the experiment</p>
+            <ul class="list-group">
+              {% for key,val in global_info.items() %}
+                <li class="list-group-item"><b>{{ key|safe }}:</b> {{ val|safe}}</li>
+              {% endfor %}
+            </ul>
+        </div>
+        <div id="menu2" class="tab-pane fade">
+          <h3>Jobs Info</h3>
+          <p>This section displays the test results of the experiment</p>
+            {% for chart in charts %}
+              {% for c in chart %}
+                <div id="{{ c['chartID']|safe }}" class="{{ c['chart']['renderTo']|safe }}" style="height:400px; width: 400px; float: left;"></div>
+                <script type="text/javascript"> 
+                  var {{ 'chart_id'+c['id'] }} = {{ c['chartID']|safe }}
+                  var {{ 'series'+c['id'] }} = {{ c['series']|safe }}
+                  var {{ 'title'+c['id'] }} = {{ c['title']|safe }}
+                  var {{ 'xAxis'+c['id'] }} = {{ c['xAxis']|safe }}
+                  var {{ 'yAxis'+c['id'] }} = {{ c['yAxis']|safe }}
+                  var {{ 'chart'+c['id'] }} = {{ c['chart']|safe }} 
+                </script>
+              {% endfor %}
+            {% endfor %}  
+
+            <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+            <script src="http://code.highcharts.com/highcharts.js"></script>   
+              <script type="text/javascript">
+                  $(document).ready(function() {
+                    {% for chart in charts %}
+                      {% for c in chart %}
+                          $({{ c['chartID']|safe }}).highcharts({
+                            chart: {{ 'chart'+c['id'] }},
+                            title: {{ 'title'+c['id'] }},
+                            xAxis: {{ 'xAxis'+c['id'] }},
+                            yAxis: {{ 'yAxis'+c['id'] }},
+                            series: {{ 'series'+c['id'] }}
+                          });
+                      {% endfor %}
+                    {% endfor %}  
+                  });         
+              
+              </script>
+
+        </div>
+        <div id="menu3" class="tab-pane fade">
+          <h3>Disk Utility</h3>
+          <p>This section displays the information related to disk utility during the test run.</p>
+            <ul class="list-group">
+              {% for key,val in disks.items() %}
+                <li class="list-group-item"><b>{{ key|safe }}:</b> {{ val|safe}}</li>
+              {% endfor %}
+            </ul>
+        </div>
+      </div>
+    </div>
+
+
+
+    
+
+  
+</body>
+</html>   
