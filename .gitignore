@@ -10,6 +10,7 @@ Thumbs.db
 \#*\#
 .\#*\#
 venv/
+flask/
 build/
 src/org-templates
 src/style
