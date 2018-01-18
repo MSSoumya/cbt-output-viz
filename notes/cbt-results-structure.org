@@ -1,0 +1,11 @@
+#+title: Observations on the CBT results 
+
+* Introduction
+  This file enlists various observations made on the CBT
+  output directory structure, files, the output file
+  structure, the notable configurations to be considered
+  etc.
+
+* Directory Structure
+  
+* File structure

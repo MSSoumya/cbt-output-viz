@@ -1,0 +1,15 @@
+#+title: Configuring CBT to generate tests
+
+* Introduction
+  This file describes the methods and files involved in
+  configuring CBT. It also enlists various important
+  configurations.
+
+* Script structure
+
+The runme_rbd.sh script and the runme_rados.sh scripts are
+the files we need to run to obtain the benchmarking results.
+These files inturn make use of the cbt.py and other config
+files to fix the configurations.
+
+
