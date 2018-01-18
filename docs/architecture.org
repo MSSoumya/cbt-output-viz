@@ -1,0 +1,21 @@
+#+title: Architecture document
+#+Author: M.S.Soumya
+
+* Introduction
+  This document describes the architecture of the entire 
+  Visualization project for CBT.
+
+* Architecture for CBT Visualization framework
+  
+  Below is the architecture diagram for the Visualization
+  framework.
+  
+
+  [[./figs/architecture-diagram.png]]
+
+  The blue boxes and arrows depict the generation of results
+  from the Benchmark tests. As shown in the diagram,
+  results are generated after the completion of the test
+  scripts. The test scripts in turn require/use cbt
+  configurations and ceph configurations. The test scripts
+  include a couple of configurations themselves.  
