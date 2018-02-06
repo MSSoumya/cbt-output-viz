@@ -4,8 +4,96 @@
   This file enlists various observations made on the CBT
   output directory structure, files, the output file
   structure, the notable configurations to be considered
-  etc.
+  etc. We are currently working with two kinds of
+  benchmarking, librbdfio(rbd) and radosbench(rados).
 
-* Directory Structure
+* Librbdfio
+			
+** CBT Configurations 
+   This section describes the variables in the configurations
+   which determine the 
+
+   There are 4 main configurations which determine the
+   structure of this benchmark results.
+
+   - The number of iterations
+   - The number of op sizes to test: ie. op_size
+   - Whether or not to perform only write operations, ie:
+     write_only
+   - num of concurrent processes ie: concurrent_proc
+
+
+** Directory Structure
+   The directory structure of the output obtained on running
+   the CBT tests(locally) is dependent on the configurations
+   mentioned in the CBT config files. Depending on the
+   benchmark chosen, the directory structure changes. 
   
-* File structure
+   - path mentioned in the script(where to save the outputs)
+	 - "num of osds" + "benchmark" + "some string" + "disk
+         config" + "type of store"
+       - results
+		 - cbt_config.yaml
+		 - iteration
+		   - id"randomly generated number"
+			 - benchmark.yaml
+			 - seq
+			   - json0
+			   - json1
+			 - write
+			   - json0
+			   - json1
+
+
+- the number of directories under the =iteration= dir is
+  equal to the number of op_size. 
+- the number of =iteration= directories is equal to the
+  number of iterations in the cbt config.
+- there are two json outputs under each, the =seq= and the
+  =write= directory. Im guessing that it depends on the
+  number of =concurrent_proc=
+
+
+* Radosbench
+** CBT Configurations 
+  There are 3 main configurations which determine the
+  structure of this benchmark results.
+
+  - The number of iterations
+  - The number of op sizes to test: ie. op_size
+  - Whether or not to perform only write operations, ie:
+    write_only
+  - Number of volumes per client
+
+** Directory Structure
+   The directory structure of the output obtained on running
+   the CBT tests(locally) is dependent on the configurations
+   mentioned in the CBT config files. Depending on the
+   benchmark chosen, the directory structure changes. 
+  
+   - path mentioned in the script(where to save the outputs)
+     - "num of osds" + "benchmark" + "some string" + "disk
+         config" + "type of store" 
+       - results
+		 - cbt_config.yaml
+		 - iteration
+		   - id"randomly generated number"
+			 - benchmark.yaml
+			 - json0
+			 - json1
+
+
+- the number of directories under the =iteration= dir is
+  equal to the number of op_size. 
+- the number of =iteration= directories is equal to the
+  number of iterations in the cbt config.
+- there are two json outputs under each, the =seq= and the
+  =write= directory. Im guessing that it depends on the
+  number of =concurrent_proc=
+
+* Observations
+- the format of the json output of the librbdfio is
+  different from that of the radosbench
+- Under the radosbench tests, the output json files for the
+  2nd op_size are not generated. they are saved in the
+  collectl directory in compressed format.
