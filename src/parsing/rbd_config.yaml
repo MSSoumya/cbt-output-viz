@@ -1,0 +1,121 @@
+# The cluster section is where genral cluster settings go
+cluster:
+  # The user/hosts where commands should be run and osds/mons/mgrs/rgw/etc go
+  user: 'soumya'
+  head: "incerta08.front.sepia.ceph.com"
+  clients: ["incerta08.front.sepia.ceph.com"]
+  osds: ["incerta08.front.sepia.ceph.com"]
+  mons:
+    incerta08.front.sepia.ceph.com:
+      a: "10.0.10.108:6789" # Use the 40GbE network for mon communication!
+  mgrs:
+    incerta08.front.sepia.ceph.com:
+      a: ~
+
+  # Number of OSDs to deploy per host
+  osds_per_node: 1
+
+  # Settings for the OSD filesystem (also to bootstrap bluestore)
+  fs: 'xfs'
+  mkfs_opts: '-f -i size=2048'
+  mount_opts: '-o inode64,noatime,logbsize=256k'
+
+  # default conf file to use (can be overridden on the commandline)
+  conf_file: '/home/nhm/incerta/ceph.conf.64.async'
+
+  # How many iterations to run the tests for
+  # 2 iteration * 6 tests below = 12 tests run total
+  iterations: 2
+
+  # Enabling use_existing makes CBT skip the cluster creation step
+  # and attempt to run benchmarks against an existing ceph cluster.
+  use_existing: False
+
+  # The clusterid, usually fine to leave as ceph unless another cluster is running.
+  clusterid: "ceph"
+
+  # Where cbt should store it's temporary files.  
+  tmp_dir: "/tmp/cbt"
+
+  # The paths to various ceph commands, often /usr/local/bin for sel-compiled ceph.
+  ceph-osd_cmd: "env -i TCMALLOC_MAX_TOTAL_THREAD_CACHE_BYTES=134217728 /usr/local/bin/ceph-osd"
+#  ceph-osd_cmd: "/usr/local/bin/ceph-osd"
+  ceph-mon_cmd: "/usr/local/bin/ceph-mon"
+  ceph-run_cmd: "/usr/local/bin/ceph-run"
+  rados_cmd: "/usr/local/bin/rados"
+  ceph_cmd: "/usr/local/bin/ceph"
+  rbd_cmd: "/usr/local/bin/rbd"
+  ceph-mgr_cmd: "/usr/local/bin/ceph-mgr"
+
+  # these pool "profiles" define how pools should be created for different benchmarks.
+  # ie the replication profile might define 3x replication, while the ec profile might
+  # define a 2+1 erasure coding pool.
+  pool_profiles:
+    # No replication, data only goes to 1 OSD
+    no_rep:
+      pg_size: 128
+      pgp_size: 128
+      replication: 1
+    # 3x replication needs at least 3 OSDs to work!
+    3x_rep:
+      pg_size: 128
+      pgp_size: 128
+      replication: 3
+    # EC 2+1 needs at least 4 (3?) OSDs to work!
+    ec21:
+      pg_size: 1024
+      pgp_size: 1024
+      replication: 'erasure'
+      erasure_profile: 'ec21'
+
+  # Erasure profiles are used by pool profiles that want to use erasure coding
+  erasure_profiles:
+    ec21:
+      erasure_k: 2
+      erasure_m: 1
+
+benchmarks:
+  # This is a simple example for a librbd benchmark that runs 6 tests
+  librbdfio:
+    # Run each test for 60s
+    time: 60
+
+    # Specify that this test should be time based
+    time_based: True
+
+    # Make the test truly random instead of skipping sectors already hit
+    norandommap: True
+
+    # Create 2GB RBD volumes
+    vol_size: 2048
+
+    # Test random reads and random writes
+    mode: ['randread', 'randwrite']
+
+    # Test 4MB, 128KB, and 4KB IOs
+    # Note that with 2 modes and 3 sizes, 6 tests will be run.
+    op_size: [4194304, 131072, 4096]
+
+    # 1 process per volume, almost always what you want
+    procs_per_volume: [1]
+
+    # Each client node will test IO against 2 volumes with <procs_per_volume>
+    # processes.
+    volumes_per_client: [2]
+
+    # The number of concurrent ios each fio process should issue.
+    iodepth: [32]
+
+    # the amount of readahead on the OSD (only valid for fs)
+    # FIXME: this should be a cluster option, not a bencmark options.
+    osd_ra: [4096]
+
+    # The path to the fio executable
+    cmd_path: '/home/soumya/src/fio/fio'
+
+    # The pool profile to use with this set of tests
+    pool_profile: 'no_rep'
+
+    # Gather average statistics for latency/throughput/etc roughly every 100ms
+    log_avg_msec: 100
+

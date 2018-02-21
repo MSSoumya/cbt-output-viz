@@ -1,0 +1,158 @@
+[global]
+# Use bluestore
+osd objectstore = bluestore
+
+# Disable rbd cache (but you might want to enable on HDDs!)
+rbd cache = false
+
+# For running with 1 node
+osd crush chooseleaf type = 0
+
+# self-compiled lib/plugin/class paths after Jewel
+erasure_code_dir = /usr/local/lib64/ceph/erasure-code
+plugin_dir = /usr/local/lib64/ceph
+osd_class_dir = /usr/local/lib64/rados-classes
+
+# self-compiled lib/plugin/class paths for Jewel and earlier
+#        erasure_code_dir = /usr/local/lib/ceph/erasure-code
+#        plugin_dir = /usr/local/lib/ceph
+#        osd_class_dir = /usr/local/lib/rados-classes
+
+# self-compiled ceph crushtool is in /usr/local/bin
+crushtool = /usr/local/bin/crushtool
+
+# relax thresholds/warnings/safety features for testing
+mon osd report timeout = 10000000
+mon_allow_pool_delete = true
+osd scrub load threshold = 0.01
+osd scrub min interval = 137438953472
+osd scrub max interval = 137438953472
+osd deep scrub interval = 137438953472
+osd max scrubs = 16
+mon pg warn max object skew = 100000
+mon pg warn min per osd = 0
+mon pg warn max per osd = 32768
+mon_max_pg_per_osd = 32768
+
+# Make defaults pools 1x rep for single OSD tests
+osd pool default size = 1
+
+# Disable auth since we don't want it interfering
+keyring = /tmp/cbt/ceph/keyring
+auth supported = none
+auth cluster required = none
+auth service required = none
+auth client required = none
+
+# Put logs in cbt tmp directory
+log to syslog = false
+log file = /tmp/cbt/ceph/log/$name.log
+rocksdb_log = /tmp/cbt/ceph/log/rocksdb.log
+
+# Use the 40GbE network on the incerta nodes
+public network = 10.0.10.0/24
+cluster network = 10.0.10.0/24
+
+# Disable debuging since it can slow down NVMe tests
+debug_bluefs = "0/0"
+debug_bluestore = "0/0"
+debug_bdev = "0/0"
+debug_lockdep = "0/0"
+debug_context = "0/0"
+debug_crush = "0/0"
+debug_mds = "0/0"
+debug_mds_balancer = "0/0"
+debug_mds_locker = "0/0"
+debug_mds_log = "0/0"
+debug_mds_log_expire = "0/0"
+debug_mds_migrator = "0/0"
+debug_buffer = "0/0"
+debug_timer = "0/0"
+debug_filer = "0/0"
+debug_objecter = "0/0"
+debug_rados = "0/0"
+debug_rbd = "0/0"
+debug_journaler = "0/0"
+debug_objectcacher = "0/0"
+debug_client = "0/0"
+debug_osd = "0/0"
+debug_optracker = "0/0"
+debug_objclass = "0/0"
+debug_filestore = "0/0"
+debug_journal = "0/0"
+debug_ms = "0/0"
+debug_mon = "0/0"
+debug_monc = "0/0"
+debug_paxos = "0/0"
+debug_tp = "0/0"
+debug_auth = "0/0"
+debug_finisher = "0/0"
+debug_heartbeatmap = "0/0"
+debug_perfcounter = "0/0"
+debug_rgw = "0/0"
+debug_hadoop = "0/0"
+debug_asok = "0/0"
+debug_throttle = "0/0"
+
+# FIXME: /tmp/cbt might be a better place, but this works for now
+[client]
+log_file = /var/log/ceph/ceph-rbd.log
+admin_socket = /var/run/ceph/ceph-rbd.asok
+
+# Settings that apply to all mons
+[mon]
+mon data = /tmp/cbt/ceph/mon.$id
+
+# host settings for the first (and only) mon we are configuring        
+[mon.a]
+host = incerta08.front.sepia.ceph.com
+mon addr = 10.0.10.108:6789
+
+# Settings for each OSD (mostly about the partitions to use) 
+[osd.0]
+host = incerta08.front.sepia.ceph.com
+osd data = /tmp/cbt/mnt/osd-device-0-data
+bluestore block path = /dev/disk/by-partlabel/osd-device-0-block
+bluestore block db path = /dev/disk/by-partlabel/osd-device-0-db
+bluestore block wal path = /dev/disk/by-partlabel/osd-device-0-wal
+
+[osd.1]
+host = incerta08.front.sepia.ceph.com
+osd data = /tmp/cbt/mnt/osd-device-1-data
+bluestore block path = /dev/disk/by-partlabel/osd-device-1-block
+bluestore block db path = /dev/disk/by-partlabel/osd-device-1-db
+bluestore block wal path = /dev/disk/by-partlabel/osd-device-1-wal
+
+[osd.2]
+host = incerta08.front.sepia.ceph.com
+osd data = /tmp/cbt/mnt/osd-device-2-data
+bluestore block path = /dev/disk/by-partlabel/osd-device-2-block
+bluestore block db path = /dev/disk/by-partlabel/osd-device-2-db
+bluestore block wal path = /dev/disk/by-partlabel/osd-device-2-wal
+
+
+[osd.3]
+host = incerta08.front.sepia.ceph.com
+osd data = /tmp/cbt/mnt/osd-device-3-data
+bluestore block path = /dev/disk/by-partlabel/osd-device-3-block
+bluestore block db path = /dev/disk/by-partlabel/osd-device-3-db
+bluestore block wal path = /dev/disk/by-partlabel/osd-device-3-wal
+
+estore block path = /dev/disk/by-partlabel/osd-device-1-block
+bluestore block db path = /dev/disk/by-partlabel/osd-device-1-db
+bluestore block wal path = /dev/disk/by-partlabel/osd-device-1-wal
+
+[osd.2]
+host = incerta08.front.sepia.ceph.com
+osd data = /tmp/cbt/mnt/osd-device-2-data
+bluestore block path = /dev/disk/by-partlabel/osd-device-2-block
+bluestore block db path = /dev/disk/by-partlabel/osd-device-2-db
+bluestore block wal path = /dev/disk/by-partlabel/osd-device-2-wal
+
+
+[osd.3]
+host = incerta08.front.sepia.ceph.com
+osd data = /tmp/cbt/mnt/osd-device-3-data
+bluestore block path = /dev/disk/by-partlabel/osd-device-3-block
+bluestore block db path = /dev/disk/by-partlabel/osd-device-3-db
+bluestore block wal path = /dev/disk/by-partlabel/osd-device-3-wal 
