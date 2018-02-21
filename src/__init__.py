@@ -2,6 +2,9 @@ from flask import Flask, render_template
 import json
 import sys
 import collections
+import pprint
+
+pp = pprint.PrettyPrinter(indent=4)
  
 app = Flask(__name__)
 
@@ -12,17 +15,20 @@ def homepage():
     paragraph = [""]
 
     try:
-        return render_template("index.html", title = title, paragraph=passthrough_errorsragraph)
-    except Exception, e:
+        # return render_template("index.html", title = title, paragraph=passthrough_errorsragraph)
+        return render_template("index.html", title = title, paragraph= paragraph)
+    except Exception as e:
         return str(e)
 
 
 @app.route('/graph')
 def graph(chartID = 'chart_ID', chart_type = 'column', chart_height = 400):
     clat_perc = all_data["jobs"][0]["write"]["clat"]["percentile"]
+
+    pp.pprint(clat_perc)
     all_data["jobs"][0]["write"]["clat"].pop("percentile")
     clat_data=all_data["jobs"][0]["write"]["clat"]
-    parsed_perc_clat = collections.OrderedDict(map(lambda (k,v): (float(k),v), clat_perc.iteritems()))
+    parsed_perc_clat = collections.OrderedDict(map(lambda (k,v): (float(k),v), clat_perc.items()))
     iodepth_data = all_data["jobs"][0]["iodepth_level"]
     latency_data = all_data["jobs"][0]["latency_ms"]
     write_slat = all_data["jobs"][0]["write"]["slat"]
@@ -116,6 +122,8 @@ def graph(chartID = 'chart_ID', chart_type = 'column', chart_height = 400):
     basic_info["Timestamp"] = all_data["timestamp"]
     basic_info["Time"] = all_data["time"]
     global_info = all_data["global options"]
+
+    print(basic_info)
     return render_template('index.html', charts=charts, disks=disk_util_data, basic_info=basic_info, global_info=global_info)
  
 
@@ -130,5 +138,6 @@ if __name__ == "__main__":
     with open('../input/fio_json.out') as fp:
         global all_data 
         all_data = json.loads(fp.read(), object_pairs_hook=collections.OrderedDict)
+        pp.pprint(all_data)
 
     app.run(debug = True, host='0.0.0.0', port=8080, passthrough_errors=True)

@@ -2,7 +2,9 @@
 #! bash script for setting up enviornment for flask app
 
 
-sudo apt-get install python-virtualenv
+sudo apt-get install python3-pip
+
+sudo pip3 install virtualenv
 
 virtualenv flask
 

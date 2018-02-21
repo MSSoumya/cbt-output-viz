@@ -1,4 +1,5 @@
 #+title: Observations on the CBT results 
+#+Author: M.S.Soumya
 
 * Introduction
   This file enlists various observations made on the CBT
@@ -53,7 +54,7 @@
   =write= directory. Im guessing that it depends on the
   number of =concurrent_proc=
 
-
+  
 * Radosbench
 ** CBT Configurations 
   There are 3 main configurations which determine the
@@ -93,7 +94,9 @@
 
 * Observations
 - the format of the json output of the librbdfio is
-  different from that of the radosbench
+  different from that of the radosbench. More nesting is
+  observed in librbdfio as compared to rados.
+
 - Under the radosbench tests, the output json files for the
   2nd op_size are not generated. they are saved in the
   collectl directory in compressed format.

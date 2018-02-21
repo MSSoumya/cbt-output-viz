@@ -14,8 +14,28 @@
   [[./figs/architecture-diagram.png]]
 
   The blue boxes and arrows depict the generation of results
-  from the Benchmark tests. As shown in the diagram,
-  results are generated after the completion of the test
-  scripts. The test scripts in turn require/use cbt
-  configurations and ceph configurations. The test scripts
-  include a couple of configurations themselves.  
+  from the Benchmark tests. As shown in the diagram, results
+  are generated after the completion of execution of the
+  test scripts. The test scripts in turn requires/uses CBT
+  configurations and Ceph configurations. The test scripts
+  include a couple of configurations themselves.
+
+* Use-case Scenarios
+
+  There are two main use-case scenarios in which this
+  architecture would be used. The architecture may differ
+  slightly among the two use-cases in terms of technology as
+  well as additional components.
+
+** Use-case scenario 1
+   The visualization platform is used to visualize the tests
+   run individually by developers on their machine. 
+
+** Use-case scenario 2
+   The visualization platform is integrated with teuthology
+   and the nightly tests results can be visualized. 
+
+   An added facility to this use-case could be that results
+   of the individual tests performed by developers could be
+   pulled into this service and displayed along side all the
+   other tests.
