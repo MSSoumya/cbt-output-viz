@@ -23,6 +23,19 @@ parse the config using ConfigParser
 
 store the vals in the form of a dict to be later appended into a JSON.
 '''
+"""
+TODO list:
+
+- Add variables for file paths of ceph conf and cbt conf 
+- Add the benchmark which ran in the output json
+- Change a few variable names to make more sense
+- Separate DB functionality into another script
+- Modify code to allow for passing arguments from command line or from another file
+- Clean code, by removing commented print statements
+- Check mongodb version on incerta
+- a shell-script to invoke both the parser and db insertion script to enable running over multiple test results
+"""
+
 pp = pprint.PrettyPrinter(indent=4)
 
 #Read the ceph conf file
@@ -36,29 +49,30 @@ for line in indented_vars_file:
 fp.truncate()
 
 # create a ConfigParser object
-config = ConfigParser.RawConfigParser(allow_no_value=True)
+parsed_config = ConfigParser.RawConfigParser(allow_no_value=True)
 
+# Load the file containing required configuration variables
 g = open('vars.conf')
-config.readfp(g)
+parsed_config.readfp(g)
 
-# print(config.items("ceph"))
-
-# vars = [x.strip('\n').split(".") for x in g.readlines()]
-
-
+# Loading the CBT config file
 cbt_fp = open('rbd_config.yaml')
-cbt_config_data = yaml.load(cbt_fp)
-# print cbt_config_data
+cbt_config_data = yaml.load(cbt_fp) # cbt config data loaded as dict
 
 # there are two files from which the configurations are collected, ceph-conf and the cbt-conf
 
 # This function gets the category ie either ceph or cbt form the vars.conf file
 def get_vars(category):
 	vars_list = []
+	ls = []
 	g = open('vars.conf')
-	config.readfp(g)
-	vars_list = config.items(category)
-	return vars_list
+	parsed_config.readfp(g)
+	vars_list = parsed_config.items(category)
+	ls = map(lambda x: list(x), vars_list)
+	map(lambda x: x.pop(), ls)
+	# map(lambda x: x[0].split('.'), ls)
+	# print ls
+	return ls
 
 config_files = ["ceph", "cbt"]
 
@@ -66,26 +80,26 @@ config_files = ["ceph", "cbt"]
 # to the values form the respective config file
 # variables contains the list of tuples form the vars file under the given category
 def get_vals_from_config(category, variables):
-	val_list = []
+	config_val_mapped_dict = {}
 	if category == "ceph":
-		fp.seek(0)
-		config.readfp(fp)
+		fp.seek(0)						# ceph config file pointer
+		parsed_config.readfp(fp)		# configParser object for ceph config
 		for var in variables:
-			# var_list.append(var[0].split('.'))
-			val = var[0].split('.')
-			val_list.append((val[1], dict(config.items(val[0]))[val[1]]))
-		# print val_list
-		return val_list
-		values_list = config.items(category)
+			config = var[0].split('.')
+			# print(config)
+			config_val_mapped_dict[config[1]] = dict(parsed_config.items(config[0]))[config[1]]
+		# print config_val_mapped_dict
+		return config_val_mapped_dict
+		values_list = parsed_config.items(category)
 	if category == "cbt":
 		for var in variables:
 			val = var[0].split('.')
-			value = cbt_config_data
+			cbt_value = cbt_config_data
 			for x in val:
-				value = value[x]
-			val_list.append((val[len(val)-1], value))
-		# print val_list
-		return val_list
+				cbt_value = cbt_value[x]
+			config_val_mapped_dict[val[-1]] = cbt_value
+			# print config_val_mapped_list
+		return config_val_mapped_dict
 
 
 # the result is jsonified to generate a json containing the necessary variables with their values
@@ -93,13 +107,13 @@ result = {}
 
 for file in config_files:
 	if file == "ceph":
-		print("Gathering CEPH configurations")
+		print("Gathering CEPH configurations ...........")
 		variables = get_vars(file)
 		# print(variables)
 		result[file] = get_vals_from_config(file, variables)
 		# print result
 	if file == "cbt":
-		print("Gathering CBT configurations")		
+		print("Gathering CBT configurations ...........")		
 		variables = get_vars(file)
 		# print(variables)
 		result[file] = get_vals_from_config(file, variables)
