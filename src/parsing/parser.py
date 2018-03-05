@@ -1,8 +1,10 @@
 import yaml
-import sys, json, collections
+import json
 import pprint
 import ConfigParser
 import textwrap
+import os, re
+from pymongo import MongoClient
 
 '''
 In this version of the parser, it is assumed that the 
@@ -102,8 +104,53 @@ def get_vals_from_config(category, variables):
 		return config_val_mapped_dict
 
 
-# the result is jsonified to generate a json containing the necessary variables with their values
+def get_required_filepaths_from_results():
+	fp = open("results_file_list.txt", "w+")
+	for subdir, dirs, files in os.walk(path_to_cbt_results):
+		for file in files:
+			for pattern in patterns: 
+				if re.search(pattern, file):
+					if pattern == "benchmark_config":
+						fp.write(os.path.join(subdir, file))
+						fp.write("\n")
+					if pattern == "json_output.1" or pattern == "json_output.0" :
+						fp.write(os.path.join(subdir, file))
+						fp.write("\n")
+	fp.close()
+
+
+def get_req_benchmark_configs_value_pairs(filepath, config_val_mapped_dict):
+	fp = open(filepath)
+	config_data = yaml.load(fp) # load the benchmark yaml as a dict
+	req_config_list = get_vars("cbt_results") # retrieve the required results configurations from vars.conf 
+	# print req_config_list
+	config_dict = {}
+	for config in req_config_list:
+		# print config
+		path = config[0].split('.') # path of the config represented as a list 
+		# print value
+		config_value = config_data 
+		for nest in path:
+			config_value = config_value[nest]
+		config_val_mapped_dict[path[-1]] = config_value
+		# config_dict[config] = config_data[config]
+	fp.close()
+	return config_val_mapped_dict
+
+def get_result_file(filepath):
+	fp = open(filepath)
+	res = json.load(fp)
+	fp.close()
+	# pp.pprint(dict(res))	
+	return res
+
+
+path_to_cbt_results = "/home/soumya/outreachy/test/cbt_results/rbd-tests/3osd_rbd_example_hdd_hdd_bs"
+patterns = ['json_output.0', 'json_output.1', 'benchmark_config']
+
 result = {}
+
+# the result is jsonified to generate a json containing the necessary variables with their values
 
 for file in config_files:
 	if file == "ceph":
@@ -119,5 +166,47 @@ for file in config_files:
 		result[file] = get_vals_from_config(file, variables)
 		# print result
 
-pp.pprint(result)
+# pp.pprint(result)
 
+
+f = open("results_file_list.txt")
+files_list = f.read().split("\n")
+# print(files)
+counter = 0
+result["cbt_results"] = {}
+for file in files_list:
+	for pattern in patterns:
+		if re.search(pattern, file):
+			if not result["cbt_results"].has_key("output_"+str(counter)):
+				result["cbt_results"]["output_"+str(counter)] = {}
+			if pattern == "benchmark_config":
+				# benchmark_value_pairs = get_req_benchmark_configs(file)
+				# print file
+				result["cbt_results"]["output_"+str(counter)] = get_req_benchmark_configs_value_pairs(file, result["cbt_results"]["output_"+str(counter)])
+				counter += 1
+			if pattern == "json_output.0":
+				# print file
+				result["cbt_results"]["output_"+str(counter)]["0"] = get_result_file(file)
+			if pattern == "json_output.1":
+				result["cbt_results"]["output_"+str(counter)]["1"] = get_result_file(file)
+	# result["cbt_results"]["output_"+str(counter)] = {}
+
+rp = open("input_to_db.json", "w")
+rp.write(json.dumps(result, indent = 4))
+rp.close()
+# pp.pprint(result)
+
+
+################## Database component ########################
+
+client = MongoClient()
+
+db = client['xyz']
+collection = db['abc']
+# im using mongoDB version 2.6.1, hence using the relevant pymongo
+# because mongodb version 3.4.1 doesnt support/allow "." in key values,I am using the command of a deprecated version.
+doc_id = collection.insert(result, check_keys=False)
+
+# For pymongo version 3.6.1, 
+# doc_id = collection.insert_one(result).inserted_id
+print(doc_id)
