@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--<link rel="stylesheet" media="screen" href = "{{ url_for('static', filename='bootstrap.min.css') }}">-->
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous"> -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<meta name="viewport" content = "width=device-width, initial-scale=1.0">
+<head>
+<title>CBT Visualization</title>
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}"">
+
+<!-- <script src="../static/graph.js"></script> -->
+</head>
+
+<body class = "wrapper">
+	<nav id="sidebar">
+        <div class="sidebar-header">
+            <h3 class="font-weight-bold">CBT Res-Viz</h3>
+        </div>
+    </nav>
+
+	<div id="content">            
+		<header class="navbar navbar-expand navbar-light flex-column flex-md-row bd-navbar mb-2 bg-dark text-white">
+			 <div class="navbar-header">
+                <button type="button" id="sidebarCollapse" id="toggle-btn">
+                    <i class="fas fa-align-left"></i>
+                </button>
+            </div>
+			<div class="navbar-nav flex-row ml-md-auto d-none d-md-flex"></div>
+			<a class="btn btn-info my-2 my-sm-0" >About</a>
+			<a class="btn my-2 my-sm-1"></a>
+		</header>
+
+		<div class="body">
+	      {% block body %}{% endblock %}
+	    </div>
+
+	</div>
+
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function () {
+		    $('#sidebarCollapse').on('click', function () {
+		        $('#sidebar, #content').toggleClass('active');
+		        $('.collapse.in').toggleClass('in');
+		    });
+		});
+    </script>
+
+</body>
+</html>
