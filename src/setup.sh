@@ -27,3 +27,5 @@ flask/bin/pip $proxy install python-dateutil
 flask/bin/pip $proxy install datetime
 
 flask/bin/pip $proxy install -U flask-cors
+
+flask/bin/pip $proxy install pymongo
