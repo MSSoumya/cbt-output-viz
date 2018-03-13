@@ -168,7 +168,7 @@ for file in config_files:
 
 # pp.pprint(result)
 
-
+get_required_filepaths_from_results()
 f = open("results_file_list.txt")
 files_list = f.read().split("\n")
 # print(files)
