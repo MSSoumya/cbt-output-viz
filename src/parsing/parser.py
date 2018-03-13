@@ -6,6 +6,9 @@ import textwrap
 import os, re
 from pymongo import MongoClient
 
+path_to_ceph_config = "" # example : /path/to/ceph.conf.bs
+path_to_cbt_config = ""  # example: /path/to/runtests.2osd_rbd_example.yaml 
+
 '''
 In this version of the parser, it is assumed that the 
 
@@ -41,7 +44,8 @@ TODO list:
 pp = pprint.PrettyPrinter(indent=4)
 
 #Read the ceph conf file
-fp = open('ceph.conf.bs',"r+")
+# fp = open('ceph.conf.bs',"r+")
+fp = open(path_to_ceph_config,"r+")
 indented_vars_file = fp.readlines()
 
 #Remove the indentations in the ceph-config file
@@ -58,7 +62,8 @@ g = open('vars.conf')
 parsed_config.readfp(g)
 
 # Loading the CBT config file
-cbt_fp = open('rbd_config.yaml')
+# cbt_fp = open('rbd_config.yaml')
+cbt_fp = open(path_to_cbt_config)
 cbt_config_data = yaml.load(cbt_fp) # cbt config data loaded as dict
 
 # there are two files from which the configurations are collected, ceph-conf and the cbt-conf
