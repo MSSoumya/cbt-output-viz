@@ -8,6 +8,7 @@ from pymongo import MongoClient
 
 path_to_ceph_config = "" # example : /path/to/ceph.conf.bs
 path_to_cbt_config = ""  # example: /path/to/runtests.2osd_rbd_example.yaml 
+path_to_cbt_results = "" # example: ~/cbt_results/rbd-tests/3osd_rbd_example_hdd_hdd_bs, make sure to give the path that leads to the results dir created by CBT.
 
 '''
 In this version of the parser, it is assumed that the 
@@ -150,7 +151,7 @@ def get_result_file(filepath):
 	return res
 
 
-path_to_cbt_results = "/home/soumya/outreachy/test/cbt_results/rbd-tests/3osd_rbd_example_hdd_hdd_bs"
+
 patterns = ['json_output.0', 'json_output.1', 'benchmark_config']
 
 result = {}
