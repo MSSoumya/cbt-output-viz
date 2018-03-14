@@ -8,57 +8,62 @@ This project contains the initial steps for CBT output Visualization by Soumya (
   The directory structure of this directory is as follows:
   #+BEGIN_EXAMPLE
   .
-  ├── docs
+  ├── docs/
   │   ├── index.org
-  │   └── index.org~
-  ├── input
-  │   └── fio_json.out
+  │   └── database.org
+  │   └── architecture.org
   ├── README.org
   └── src
     ├── __init__.py
     ├── setup.sh
-    ├── static
-    │   ├── bootstrap.min.css
-    │   ├── bootstrap.min.js
+    ├── static/
     │   ├── main.css
-    │   └── popper.min.js
-    └── templates
-        └── index.html
-
+    └── templates/
+    │  └── index.html
+    │  └── layout.html
+    ├── parsing/
+    │   ├── parser.py
+    │   ├── vars.conf
   #+END_EXAMPLE
 
 * Development setup
   If you are seeing this file from you PC/laptop, it means you have
   cloned the repository. 
 
-** Install require dependencies
-  These steps are written assuming that the users machine has
-  =virtualenv=, =flask= and =pip= pre-installed. (also run =pip
-  install requests= )
+** Install required dependencies
+  These steps are written assuming that the users machine
+  has =virtualenv=, =flask= and =pip= pre-installed.
+  MongoDB is also assumed to be installed. Steps on
+  installing MongoDB on Centos [[https://docs.mongodb.com/manual/tutorial/install-mongodb-on-red-hat/][here]]. Steps on installing
+  MongoDB on Ubuntu 16.04 [[https://gist.github.com/sheikhwaqas/f2c0301099c293fc2fdccc46bb48186a][here]] or [[https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-mongodb-on-ubuntu-16-04][here]](excluding part 2)
+  (Make sure to install version 3.4)
 
-  To install the necessary dependencies, 
 ** Environment setup
-   Now that you have built the application, run the following
-   commands on terminal:
+   To install the necessary dependencies for the application
+   to run the following commands on terminal:
 
+   (If you are running the script behind a proxy, be sure to
+   set the proxy in setup.sh)
+ 
    #+BEGIN_EXAMPLE
+   $ cd <path to src>
+   $ sh setup.sh
    $ source flask/bin/activate
    #+END_EXAMPLE
 
 ** Start the application
    On completion of the above steps, run the following command to
-   start the SSS-maker application:
+   start the application:
 
    #+BEGIN_EXAMPLE
-   (flask)$ cd <path to src>
    (flask)$ python __init__.py
    #+END_EXAMPLE
   
 * Dependencies
 
-  To run this script the following are the dependencies:
+  To run these script the following are the dependencies:
 
   - Linux environment, preferably Ubuntu(14.04 and 16.04) and CentOS 7
     [These are tested].
-  - Python (>=2.7)
+  - Python (=2.7)
  
