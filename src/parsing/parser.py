@@ -83,6 +83,16 @@ def get_vars(category):
 	return ls
 
 config_files = ["ceph", "cbt"]
+#There is a possibility that some configurations were not set explicitly in the config file, 
+# hence we need to assign them their default values from the default_values.conf file.
+def get_default_config_values(category, config):			# config is the path of the config as a list
+	d = open('default_values.conf')    # Open default values file
+	new_parsed_config = ConfigParser.RawConfigParser(allow_no_value=True)
+	new_parsed_config.readfp(d)  # configParser object for default values
+	# print(dict(new_parsed_config.items(category))[config])
+	print(config+" value not found, hence used default value")
+	return dict(new_parsed_config.items(category))[config]
+
 
 # The purpose of this function is to map the variables form the vars.conf file from a given category 
 # to the values form the respective config file
@@ -95,17 +105,22 @@ def get_vals_from_config(category, variables):
 		for var in variables:
 			config = var[0].split('.')
 			# print(config)
-			config_val_mapped_dict[config[1]] = dict(parsed_config.items(config[0]))[config[1]]
-		# print config_val_mapped_dict
+			try:
+				config_val_mapped_dict[config[1]] = dict(parsed_config.items(config[0]))[config[1]]
+				print(dict(parsed_config.items(config[0]))[config[1]])
+			except KeyError:
+				config_val_mapped_dict[config[1]] = get_default_config_values(category, config[1])
 		return config_val_mapped_dict
-		values_list = parsed_config.items(category)
 	if category == "cbt":
 		for var in variables:
 			val = var[0].split('.')
 			cbt_value = cbt_config_data
-			for x in val:
-				cbt_value = cbt_value[x]
-			config_val_mapped_dict[val[-1]] = cbt_value
+			try:
+				for x in val:
+					cbt_value = cbt_value[x]
+				config_val_mapped_dict[val[-1]] = cbt_value
+			except KeyError:
+				config_val_mapped_dict[val[-1]] = get_default_config_values(category, val[-1])
 			# print config_val_mapped_list
 		return config_val_mapped_dict
 
@@ -200,7 +215,7 @@ for file in files_list:
 rp = open("input_to_db.json", "w")
 rp.write(json.dumps(result, indent = 4))
 rp.close()
-# pp.pprint(result)
+# pp.pprint(result["cbt_results"]["output_8"])
 
 
 ################## Database component ########################
