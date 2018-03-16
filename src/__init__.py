@@ -16,11 +16,13 @@ app = Flask(__name__)
 
 @app.route('/')
 def graph(chartID = 'chart_ID', chart_type = 'column', chart_height = 400):
+    p = "" # Empty if the required data field exists
     viz_data = get_latest_doc_from_db()
     viz_data = collections.OrderedDict(sorted(viz_data.items()))
-    pp.pprint(viz_data["cbt_results"]["output_8"])
+    # pp.pprint(viz_data["cbt_results"]["output_8"])
     num_of_outputs = len(viz_data["cbt_results"].keys())
     data_to_viz = {}
+    configs = get_cbt_run_config_data(viz_data)
     for output,i in zip(viz_data["cbt_results"].keys(), range(num_of_outputs)):
         data_to_viz[output] = {}
         for key in viz_data["cbt_results"][output].keys():
@@ -122,16 +124,29 @@ def graph(chartID = 'chart_ID', chart_type = 'column', chart_height = 400):
                                     }   ]
                                 ]}
 
-                data_to_viz[output][key]["disk_util_data"] = all_data["disk_util"][0]
-                basic_info= {}
-                basic_info["Fio Version"] = all_data["fio version"]
-                basic_info["Timestamp"] = all_data["timestamp"]
-                basic_info["Time"] = all_data["time"]
-                data_to_viz[output][key]["basic_info"] = basic_info
-                data_to_viz[output][key]["global_info"] = all_data["global options"]
+                try:
+                    data_to_viz[output][key]["disk_util_data"] = all_data["disk_util"][0]
+                except:
+                    data_to_viz[output][key]["disk_util_data"] = []
+                    p = "This data was not present in the json output of the CBT result. Sorry"
+                try:
+                    basic_info= {}
+                    basic_info["Fio Version"] = all_data["fio version"]
+                    basic_info["Timestamp"] = all_data["timestamp"]
+                    basic_info["Time"] = all_data["time"]
+                    data_to_viz[output][key]["basic_info"] = basic_info
+                except:
+                    data_to_viz[output][key]["basic_info"] = []
+                    p = "This data was not present in the json output of the CBT result. Sorry"
+                try:
+                    data_to_viz[output][key]["global_info"] = all_data["global options"]
+                except:
+                    data_to_viz[output][key]["global_info"] = []
+                    p = "This data was not present in the json output of the CBT result. Sorry"
+
 
     pp.pprint(data_to_viz["output_1"])
-    return render_template('index.html', viz_data=sortDictRec(data_to_viz))
+    return render_template('index.html', viz_data=sortDictRec(data_to_viz),data_unavaliable=p, run_configuration = configs)
  
 
 def get_x_y(data):
@@ -178,6 +193,17 @@ def get_latest_doc_from_db():
     result = collection.find().sort( [['_id', -1]] ).limit(1) #to fetch the latest document stored in db
     cbt_res_viz_data = sortDictRec(result[0])
     return cbt_res_viz_data
+
+
+def get_cbt_run_config_data(data):
+    config_dict = {}
+    for key, val in data["ceph"].items():
+        config_dict[key] = val
+    for key, val in data["cbt"].items():
+        config_dict[key] = val
+    pp.pprint(config_dict)
+    return config_dict
+
 
 if __name__ == "__main__":
     app.run(debug = True, port=8000, passthrough_errors=True)
