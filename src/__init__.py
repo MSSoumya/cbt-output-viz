@@ -15,14 +15,6 @@ collection = db.abc
 app = Flask(__name__)
 
 @app.route('/')
-def homep():
-    # try:
-    return render_template("layout.html")
-    # except Exception as e:
-    #     return str(e)
-
-
-@app.route('/graph')
 def graph(chartID = 'chart_ID', chart_type = 'column', chart_height = 400):
     viz_data = get_latest_doc_from_db()
     viz_data = collections.OrderedDict(sorted(viz_data.items()))
