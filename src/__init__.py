@@ -26,16 +26,17 @@ def homep():
 def graph(chartID = 'chart_ID', chart_type = 'column', chart_height = 400):
     viz_data = get_latest_doc_from_db()
     viz_data = collections.OrderedDict(sorted(viz_data.items()))
-    # pp.pprint(viz_data.keys())
+    pp.pprint(viz_data["cbt_results"]["output_8"])
     num_of_outputs = len(viz_data["cbt_results"].keys())
     data_to_viz = {}
     for output,i in zip(viz_data["cbt_results"].keys(), range(num_of_outputs)):
         data_to_viz[output] = {}
         for key in viz_data["cbt_results"][output].keys():
-            # pp.pprint(i)
+            pp.pprint(output)
             if key == "0" or key == "1":
                 all_data = viz_data["cbt_results"][output][key]
 
+                pp.pprint(all_data)
                 if all_data["global options"]["rw"] == "randread":
                     rw_var = "read"
                 if all_data["global options"]["rw"] == "randwrite":
@@ -74,7 +75,7 @@ def graph(chartID = 'chart_ID', chart_type = 'column', chart_height = 400):
                                     { 
                                     "id": "1"+str(i)+key,
                                     "chart": {"renderTo": "chart1"+str(i)+str(key), "type": chart_type, "height": chart_height},
-                                    "series": [{"name": 'Value', "data": y_vals1}],
+                                    "series": [{"showInLegend": 'false', "name": 'Value', "data": y_vals1}],
                                     "title": {"text": rw_var+' cycle Completion latency Percentiles'},
                                     "xAxis": {"categories": x_vals1, "title": {"text": 'Percentiles'}},
                                     "yAxis": {"title": {"text": 'Values'}},
@@ -85,7 +86,7 @@ def graph(chartID = 'chart_ID', chart_type = 'column', chart_height = 400):
                                     "chart": {"renderTo": "chart2"+str(i)+str(key), "type": chart_type, "height": chart_height},
                                     "series": [{"name": 'Value', "data": y_vals2}],
                                     "title": {"text": rw_var+' cycle Completion Latency Statistics'},
-                                    "xAxis": {"categories": x_vals2, "title": {"text": 'Statistics'}},
+                                    "xAxis": {"categories": x_vals2},
                                     "yAxis": {"title": {"text": 'Time taken'}},
                                     "chartID": "chartID2"+str(i)+key
                                     },
@@ -94,7 +95,7 @@ def graph(chartID = 'chart_ID', chart_type = 'column', chart_height = 400):
                                     "chart": {"renderTo": "chart3"+str(i)+str(key), "type": chart_type, "height": chart_height},
                                     "series": [{"name": 'Value', "data": y_vals3}],
                                     "title": {"text": rw_var+' cycle Submission Latency'},
-                                    "xAxis": {"categories": x_vals3, "title": {"text": 'Statistics'}},
+                                    "xAxis": {"categories": x_vals3},
                                     "yAxis": {"title": {"text": 'Time taken'}},
                                     "chartID": "chartID3"+str(i)+key
                                     },
@@ -103,7 +104,7 @@ def graph(chartID = 'chart_ID', chart_type = 'column', chart_height = 400):
                                     "chart": {"renderTo": "chart4"+str(i)+str(key), "type": chart_type, "height": chart_height},
                                     "series": [{"name": 'Value', "data": y_vals4}],
                                     "title": {"text": rw_var+' cycle Total Latency'},
-                                    "xAxis": {"categories": x_vals4, "title": {"text": 'Statistics'}},
+                                    "xAxis": {"categories": x_vals4},
                                     "yAxis": {"title": {"text": 'Time taken'}},
                                     "chartID": "chartID4"+str(i)+key
                                     }   
@@ -112,7 +113,7 @@ def graph(chartID = 'chart_ID', chart_type = 'column', chart_height = 400):
                                     {
                                     "id": "a"+str(i)+key,
                                     "chart": {"renderTo": "chart_a"+str(i)+str(key), "type": chart_type, "height": chart_height},
-                                    "series": [{"name": 'Value', "data": y_vals_a}],
+                                    "series": [{"data": y_vals_a}],
                                     "title": {"text": 'Trim cycle IO depth levels'},
                                     "xAxis": {"categories": x_vals_a, "title": {"text": 'IO Depth levels'}},
                                     "yAxis": {"title": {"text": 'Values'}},
@@ -121,7 +122,7 @@ def graph(chartID = 'chart_ID', chart_type = 'column', chart_height = 400):
                                     {
                                     "id": "b"+str(i)+key,
                                     "chart": {"renderTo": "chart_b"+str(i)+str(key), "type": chart_type, "height": chart_height},
-                                    "series": [{"name": 'Value', "data": y_vals_b}],
+                                    "series": [{"data": y_vals_b}],
                                     "title": {"text": 'Experiment Latency'},
                                     "xAxis": {"categories": x_vals_b, "title": {"text": 'Latency'}},
                                     "yAxis": {"title": {"text": 'Percentages'}},
@@ -187,4 +188,4 @@ def get_latest_doc_from_db():
     return cbt_res_viz_data
 
 if __name__ == "__main__":
-    app.run(debug = True, host='0.0.0.0', port=8000, passthrough_errors=True)
+    app.run(debug = True, port=8000, passthrough_errors=True)
