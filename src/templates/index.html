@@ -3,8 +3,24 @@
 
 {% block body %}
 
-<script src="https://code.jquery.com/jquery-1.9.1.min.js" integrity="sha256-wS9gmOZBqsqWxgIVgA8Y9WcQOa7PgSIX+rPA0VL2rbQ=" crossorigin="anonymous"></script>
+
 <script src="http://code.highcharts.com/highcharts.js"></script> 
+
+<p>
+  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#configCollapse" aria-expanded="false" aria-controls="configCollapse">
+    CBT Run configs
+  </button>
+</p>
+<div class="collapse" id="configCollapse">
+  <div class="card card-body">
+    <ul class="list-group">
+      {% for key,val in run_configuration.items() %}
+        <li class="list-group-item"><b>{{ key|safe }}:</b> {{ val|safe}}</li> 
+      {% endfor %}      
+    </ul>
+  </div>
+</div>
+
 
 <!-- ############################# OUTPUT TABS ############################## -->
   <nav>
@@ -64,9 +80,13 @@
                       <p>This visualization displays results from the following information:</p>
                         <ul class="list-group">
                           {% set basic_info = viz_data[output][key]['basic_info'] %}
-                          {% for key,val in basic_info.items() %}
-                            <li class="list-group-item"><b>{{ key|safe }}:</b> {{ val|safe}}</li>
-                          {% endfor %}
+                          {% if basic_info|length == 0 %}
+                            <p class="font-weight-bold font-italic">{{ data_unavaliable }}</p>
+                          {% else %}                         
+                            {% for key,val in basic_info.items() %}
+                              <li class="list-group-item"><b>{{ key|safe }}:</b> {{ val|safe}}</li>
+                            {% endfor %}
+                          {% endif %}
                         </ul>
                     </div>
                     
@@ -75,9 +95,14 @@
                       <p>This section displays the parameters used to setup the experiment</p>
                         <ul class="list-group">
                           {% set global_info = viz_data[output][key]['global_info'] %}
-                          {% for key,val in global_info.items() %}
-                            <li class="list-group-item"><b>{{ key|safe }}:</b> {{ val|safe}}</li>
-                          {% endfor %}
+                          {% set basic_info = viz_data[output][key]['basic_info'] %}
+                          {% if global_info|length == 0 %}
+                            <p class="font-weight-bold font-italic">{{ data_unavaliable }}</p>
+                          {% else %} 
+                            {% for key,val in global_info.items() %}
+                              <li class="list-group-item"><b>{{ key|safe }}:</b> {{ val|safe}}</li>
+                            {% endfor %}
+                          {% endif %}
                         </ul>
                     </div>
                     
@@ -122,9 +147,13 @@
                       <p>This section displays the information related to disk utility during the test run.</p>
                         <ul class="list-group">
                           {% set disks = viz_data[output][key]['disk_util_data'] %}
-                          {% for key,val in disks.items() %}
-                            <li class="list-group-item"><b>{{ key|safe }}:</b> {{ val|safe}}</li>
-                          {% endfor %}
+                          {% if disks|length == 0 %}
+                            <p class="font-weight-bold font-italic">{{ data_unavaliable }}</p>
+                          {% else %}
+                            {% for key,val in disks.items() %}
+                              <li class="list-group-item"><b>{{ key|safe }}:</b> {{ val|safe}}</li>
+                            {% endfor %}
+                          {% endif %}
                         </ul>
                     </div>
                  
